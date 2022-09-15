@@ -1,5 +1,11 @@
 pipeline {
-    agent { docker { image 'node:16.13.1-alpine' } }
+    agent { 
+        docker { 
+            image 'node:16.13.1-alpine' 
+            image 'kennethreitz/pipenv:latest'
+            args '-u root --privileged -v /var/run/docker.sock:/var/run/docker.sock'
+        } 
+    }
     stages {
         stage('build') {
             steps {
