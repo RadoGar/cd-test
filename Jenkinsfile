@@ -8,10 +8,7 @@ pipeline {
         stage('build') {
             steps {
                 sh 'node --version'
-            }
-        }
-        stage('twistlockScan') {
-            prismaCloudScanImage ca: '/certs/server/ca.pem', 
+                prismaCloudScanImage ca: '/certs/server/ca.pem', 
                 cert: '/certs/client/cert.pem', 
                 dockerAddress: 'https://docker:2376', 
                 image: 'node:16.13.1-alpine', 
@@ -21,7 +18,8 @@ pipeline {
                 project: '', 
                 resultsFile: 'prisma-cloud-scan-results.json', 
                 ignoreImageBuildTime:true
-}
+            }
+        }        
     }
      post {
         always {
