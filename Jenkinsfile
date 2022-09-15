@@ -2,10 +2,6 @@ pipeline {
     agent { 
         docker { 
             image 'node:16.13.1-alpine' 
-        }
-        docker {
-            image 'kennethreitz/pipenv:latest'
-            args '-u root --privileged -v /var/run/docker.sock:/var/run/docker.sock'
         } 
     }
     stages {
@@ -14,6 +10,18 @@ pipeline {
                 sh 'node --version'
             }
         }
+        stage('twistlockScan') {
+            prismaCloudScanImage ca: '/certs/server/ca.pem', 
+                cert: '/certs/client/cert.pem', 
+                dockerAddress: 'https://docker:2376', 
+                image: 'node:16.13.1-alpine', 
+                key: '/certs/client/key.pem', 
+                logLevel: 'debug', 
+                podmanPath: '', 
+                project: '', 
+                resultsFile: 'prisma-cloud-scan-results.json', 
+                ignoreImageBuildTime:true
+}
     }
      post {
         always {
